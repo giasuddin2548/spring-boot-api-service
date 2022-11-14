@@ -1,7 +1,9 @@
 package com.csinfotech.ewallet.controllers;
 import com.csinfotech.ewallet.model.RegistrationModel;
 import com.csinfotech.ewallet.model.UserPostModel;
+import com.csinfotech.ewallet.model.releations.StdPayments;
 import com.csinfotech.ewallet.model.releations.StdResults;
+import com.csinfotech.ewallet.model.releations.StdSubject;
 import com.csinfotech.ewallet.model.releations.Students;
 import com.csinfotech.ewallet.service.PostService;
 import com.csinfotech.ewallet.service.RegistrationService;
@@ -13,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -175,8 +179,24 @@ public class RegistrationRestController {
     }
 
     @PostMapping("/submit-students")
-    public ResponseEntity<String> submitStudents(@RequestParam(name = "username") String username, @RequestParam(name = "userEmail") String userEmail, @RequestParam(name = "userPhone") String userPhone, @RequestParam(name = "userPassword") String userPassword){
-        studentService.submitStudent(new Students(username, userEmail, userPhone, userPassword, new StdResults()));
+    public ResponseEntity<String> submitStudents(
+            @RequestParam("username") String username,
+            @RequestParam("userEmail") String userEmail,
+            @RequestParam("userPhone") String userPhone,
+            @RequestParam("userPass") String userPass,
+            @RequestParam("subName") String subName,
+
+            @RequestParam("subCode") int subCode,
+            @RequestParam("marks") int marks,
+            @RequestParam("semesterName") String semesterName,
+
+            @RequestParam("month") String month,
+            @RequestParam("fees") double fees
+    ){
+        List<StdSubject> subjectList=new ArrayList<>();
+        subjectList.add(new StdSubject("Phy", 301));
+        subjectList.add(new StdSubject("Che", 302));
+        studentService.submitStudent(new Students(username, userEmail, userPhone, userPass, new StdResults(subName, subCode, marks, semesterName), new StdPayments(month, fees), subjectList));
         return  ResponseEntity.ok("saved");
     }
 

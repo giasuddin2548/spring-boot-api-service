@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -27,6 +28,13 @@ public class Students {
     @JoinColumn(name = "result_id")
     private StdResults results;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
+    private StdPayments payments;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sub_id", referencedColumnName = "std_id")
+    private List<StdSubject> subject;
 
 
     @CreationTimestamp
@@ -36,11 +44,13 @@ public class Students {
     @Column(name = "updatedAt")
     private Date updatedAt;
 
-    public Students(String username, String userEmail, String userPhone, String userPassword, StdResults results) {
+    public Students(String username, String userEmail, String userPhone, String userPassword, StdResults results, StdPayments payments, List<StdSubject> subject) {
         this.username = username;
         this.userEmail = userEmail;
         this.userPhone = userPhone;
         this.userPassword = userPassword;
         this.results = results;
+        this.payments = payments;
+        this.subject = subject;
     }
 }

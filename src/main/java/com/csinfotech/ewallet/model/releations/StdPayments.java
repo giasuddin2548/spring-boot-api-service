@@ -10,20 +10,22 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "tbl_payments")
-public class Table3 {
+public class StdPayments {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "tbl_payments_id")
+    @Column(name = "payment_id")
     private Long id;
     private String month;
     private double fees;
-    @CreationTimestamp
-    @Column(name = "createdAt", updatable = false, nullable = false)
-    private Date createdAt;
-    @UpdateTimestamp
-    @Column(name = "updatedAt")
-    private Date updatedAt;
+
+    public StdPayments(String month, double fees) {
+        this.month = month;
+        this.fees = fees;
+    }
+
+    @OneToOne(mappedBy = "payments")
+    private Students students;
+
 }
